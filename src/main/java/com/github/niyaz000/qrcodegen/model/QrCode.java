@@ -27,9 +27,9 @@ public class QrCode {
   @NotBlank(message = "field cannot be blank")
   private String name;
 
-  private int width;
+  private Integer width;
 
-  private int height;
+  private Integer height;
 
   private int foreGroundColor;
 
