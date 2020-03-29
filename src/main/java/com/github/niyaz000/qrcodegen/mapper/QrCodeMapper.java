@@ -8,9 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface QrCodeMapper {
 
-  @Mapping(source = "data.data", target = "qrCode.data")
   QrCodeDto mapQrCodeToQrCodeDto(QrCode qrCode);
 
+  @Mapping(target = "status", ignore = true)
+  @Mapping(target = "url", ignore = true)
   QrCode mapQrCodeDtoToQrCode(QrCodeDto qrCodeDto);
 
 }

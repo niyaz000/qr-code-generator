@@ -4,41 +4,36 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.niyaz000.qrcodegen.constant.QrImageType;
 import com.github.niyaz000.qrcodegen.constant.Status;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class QrCodeDto {
 
-  @lombok.Data
-  @Builder
-  @NoArgsConstructor
-  public static class Meta {
-    private String name;
-    private int width;
-    private int height;
-    private QrImageType type = QrImageType.JPG;
+  private String name;
 
-    @JsonProperty("foreground_color")
-    private int foreGroundColor;
+  private int width;
 
-    @JsonProperty("background_color")
-    private int backGroundColor;
-  }
+  private int height;
 
-  @lombok.Data
-  @Builder
-  @NoArgsConstructor
-  public static class Data {
-    private byte[] data;
-  }
+  private QrImageType type;
 
-  private Meta meta;
-  private Data data;
+  @JsonProperty("fore_ground_color")
+  private int foreGroundColor;
+
+  @JsonProperty("back_ground_color")
+  private int backGroundColor;
+
+  private byte[] data;
 
   private Status status;
+
   private String url;
 
 }
