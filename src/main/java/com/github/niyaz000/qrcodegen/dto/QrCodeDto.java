@@ -18,9 +18,9 @@ public class QrCodeDto {
 
   private String name;
 
-  private int width;
+  private Integer width;
 
-  private int height;
+  private Integer height;
 
   private QrImageType type;
 
