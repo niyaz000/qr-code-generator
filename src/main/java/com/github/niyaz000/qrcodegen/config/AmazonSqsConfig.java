@@ -26,5 +26,4 @@ public class AmazonSqsConfig {
     threadPoolTaskExecutor.afterPropertiesSet();
     return threadPoolTaskExecutor;
   }
-
 }
