@@ -25,10 +25,10 @@ public class QrCodeDto {
   private QrImageType type;
 
   @JsonProperty("fore_ground_color")
-  private int foreGroundColor;
+  private Integer foreGroundColor;
 
   @JsonProperty("back_ground_color")
-  private int backGroundColor;
+  private Integer backGroundColor;
 
   private byte[] data;
 

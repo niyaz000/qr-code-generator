@@ -2,6 +2,8 @@ package com.github.niyaz000.qrcodegen.controller;
 
 import com.github.niyaz000.qrcodegen.constant.EndPoints;
 import com.github.niyaz000.qrcodegen.dto.QrCodeDto;
+import com.github.niyaz000.qrcodegen.mapper.QrCodeMapper;
+import com.github.niyaz000.qrcodegen.model.QrCode;
 import com.github.niyaz000.qrcodegen.service.QrCodeEncodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,9 +20,14 @@ public class QrCodeEncodeController {
   @Autowired
   QrCodeEncodeService service;
 
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public void post(@Valid QrCodeDto qrCodeDto) {
+  @Autowired
+  QrCodeMapper mapper;
 
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public QrCodeDto post(@Valid QrCodeDto qrCodeDto) throws Exception {
+    QrCode qrCode = mapper.mapQrCodeDtoToQrCode(qrCodeDto);
+    qrCode = service.create(qrCode);
+    return mapper.mapQrCodeToQrCodeDto(qrCode);
   }
 
   @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -2,9 +2,11 @@ package com.github.niyaz000.qrcodegen.service;
 
 import com.github.niyaz000.qrcodegen.aws.SqsClient;
 import com.github.niyaz000.qrcodegen.constant.ApplicationConstants;
+import com.github.niyaz000.qrcodegen.constant.QrDefaults;
 import com.github.niyaz000.qrcodegen.dao.QrCodeDao;
 import com.github.niyaz000.qrcodegen.message.QrCodeMessage;
 import com.github.niyaz000.qrcodegen.model.QrCode;
+import net.glxn.qrgen.javase.QRCode;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,19 @@ public class QrCodeEncodeService {
 
   public void get(Long id) {
     qrCodeDao.findById(id);
+  }
+
+  public void generate(QrCode qrCode) {
+    QRCode.from(qrCode.getId().toString())
+            .withColor(qrCode.getBackGroundColor(), qrCode.getForeGroundColor())
+            .withSize(qrCode.getWidth(), qrCode.getHeight())
+            .withCharset(QrDefaults.DEFAULT_ENCODING)
+            .svg();
+
+  }
+
+  private void generateSvg(QRCode qrCode) {
+    qrCode.svg();
   }
 
 }

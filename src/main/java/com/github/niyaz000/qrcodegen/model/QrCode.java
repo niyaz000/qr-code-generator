@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,6 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class QrCode {
 
   @Id
@@ -31,9 +34,9 @@ public class QrCode {
 
   private Integer height;
 
-  private int foreGroundColor;
+  private Integer foreGroundColor;
 
-  private int backGroundColor;
+  private Integer backGroundColor;
 
   private byte[] data;
 
