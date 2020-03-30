@@ -4,12 +4,15 @@ import com.github.niyaz000.qrcodegen.aws.SqsClient;
 import com.github.niyaz000.qrcodegen.constant.ApplicationConstants;
 import com.github.niyaz000.qrcodegen.constant.QrDefaults;
 import com.github.niyaz000.qrcodegen.dao.QrCodeDao;
+import com.github.niyaz000.qrcodegen.exception.QrCodeNotFound;
 import com.github.niyaz000.qrcodegen.message.QrCodeMessage;
 import com.github.niyaz000.qrcodegen.model.QrCode;
 import net.glxn.qrgen.javase.QRCode;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class QrCodeEncodeService {
@@ -35,8 +38,12 @@ public class QrCodeEncodeService {
     qrCodeDao.deleteById(id);
   }
 
-  public void get(Long id) {
-    qrCodeDao.findById(id);
+  public QrCode get(Long id) throws QrCodeNotFound {
+    Optional<QrCode> qrCode = qrCodeDao.findById(id);
+    if(qrCode.isEmpty()) {
+      throw new QrCodeNotFound();
+    }
+    return qrCode.get();
   }
 
   public void generate(QrCode qrCode) {

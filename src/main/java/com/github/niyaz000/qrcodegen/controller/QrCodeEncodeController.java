@@ -2,6 +2,7 @@ package com.github.niyaz000.qrcodegen.controller;
 
 import com.github.niyaz000.qrcodegen.constant.EndPoints;
 import com.github.niyaz000.qrcodegen.dto.QrCodeDto;
+import com.github.niyaz000.qrcodegen.exception.QrCodeNotFound;
 import com.github.niyaz000.qrcodegen.mapper.QrCodeMapper;
 import com.github.niyaz000.qrcodegen.model.QrCode;
 import com.github.niyaz000.qrcodegen.service.QrCodeEncodeService;
@@ -32,12 +33,12 @@ public class QrCodeEncodeController {
 
   @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public void delete(@PathVariable("id") Long id) {
-
+    service.delete(id);
   }
 
   @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public void get(@PathVariable("id") Long id) {
-
+  public QrCode get(@PathVariable("id") Long id) throws QrCodeNotFound {
+    return service.get(id);
   }
 
 }
