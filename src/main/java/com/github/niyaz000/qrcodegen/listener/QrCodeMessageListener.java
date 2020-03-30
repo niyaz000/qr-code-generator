@@ -13,11 +13,8 @@ import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 @Component
 public class QrCodeMessageListener {
 
-  @Value("${aws.sqs.url}")
+  @Value("${cloud.aws.sqs.url}")
   private String sqsUrl;
-
-  @Value("${aws.s3.bucket}")
-  private String s3bucket;
 
   @Autowired
   ObjectMapper mapper;
@@ -28,7 +25,7 @@ public class QrCodeMessageListener {
   @Autowired
   S3Client s3Client;
 
-  @SqsListener(value = "${aws.sqs.url}", deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
+  @SqsListener(value = "${cloud.aws.sqs.url}", deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
   public void receiveMessage(String message) throws Exception {
     QrCodeMessage qrCodeMessage = mapper.readValue(message, QrCodeMessage.class);
     qrCodeDao.findById(qrCodeMessage.getId());

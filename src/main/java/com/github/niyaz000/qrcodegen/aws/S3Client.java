@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class S3Client {
 
   @Autowired
-  AmazonS3 amazonS3Client;
+  AmazonS3 amazonS3;
 
   public void putObject(String key, byte[] data) {
 

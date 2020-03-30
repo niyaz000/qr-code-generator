@@ -1,5 +1,6 @@
 package com.github.niyaz000.qrcodegen.config;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -12,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AmazonS3Config {
 
-  @Value("${aws.s3.accessKey}")
+  @Value("${cloud.aws.credentials.accessKey}")
   private String accessKey;
 
-  @Value("${aws.s3.secretKey}")
+  @Value("${cloud.aws.credentials.secretKey}")
   private String secretKey;
 
-  @Value("${aws.s3.region}")
+  @Value("${cloud.aws.region.static}")
   private String region;
 
   @Bean
@@ -30,5 +31,4 @@ public class AmazonS3Config {
             .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
             .build();
   }
-
 }
