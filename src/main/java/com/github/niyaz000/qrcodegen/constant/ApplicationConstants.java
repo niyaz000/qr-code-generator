@@ -6,4 +6,10 @@ public class ApplicationConstants {
 
   public static final String ACCOUNT_KEY = "accountId";
 
+  public static final String METHOD = "Method";
+
+  public static final String PATH = "Method";
+
+  public static final String QUERY = "Query";
+
 }
