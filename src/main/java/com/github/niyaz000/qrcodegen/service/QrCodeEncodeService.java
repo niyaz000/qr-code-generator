@@ -5,7 +5,6 @@ import com.github.niyaz000.qrcodegen.constant.ApplicationConstants;
 import com.github.niyaz000.qrcodegen.dao.QrCodeDao;
 import com.github.niyaz000.qrcodegen.message.QrCodeMessage;
 import com.github.niyaz000.qrcodegen.model.QrCode;
-import net.glxn.qrgen.javase.QRCode;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class QrCodeEncodeService {
   @Autowired
   QrCodeDao qrCodeDao;
 
-  public QrCode create(QrCode qrCode) {
+  public QrCode create(QrCode qrCode) throws Exception {
     qrCode = qrCodeDao.save(qrCode);
     QrCodeMessage message = QrCodeMessage.builder()
             .id(qrCode.getId())

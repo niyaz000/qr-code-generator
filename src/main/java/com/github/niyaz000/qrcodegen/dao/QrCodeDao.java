@@ -1,9 +1,9 @@
 package com.github.niyaz000.qrcodegen.dao;
 
 import com.github.niyaz000.qrcodegen.model.QrCode;
+import com.github.niyaz000.qrcodegen.repository.QrCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import repository.QrCodeRepository;
 
 @Component
 public class QrCodeDao {
