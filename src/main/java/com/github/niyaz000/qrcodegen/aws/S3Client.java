@@ -23,6 +23,13 @@ public class S3Client {
   @Value("${aws.s3.bucket}")
   private String bucket;
 
+  @Value("${aws.s3.endpoint}")
+  private String endpoint;
+
+  public String getEndpoint() {
+    return endpoint;
+  }
+
   private static Logger LOGGER = LoggerFactory.getLogger(QrCodeMessageListener.class);
 
   public void putObject(String key, ByteArrayOutputStream data) {

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.Optional;
 
 @Service
@@ -34,6 +33,7 @@ public class QrCodeEncodeService {
 
   public QrCode create(QrCode qrCode) throws Exception {
     qrCode.setStatus(Status.CREATED);
+    qrCode.setUrl(getUrl(qrCode));
     qrCode = qrCodeDao.save(qrCode);
     QrCodeMessage message = QrCodeMessage.builder()
             .id(qrCode.getId())
@@ -44,8 +44,17 @@ public class QrCodeEncodeService {
     return qrCode;
   }
 
-  public void delete(Long id) {
-    qrCodeDao.deleteById(id);
+  public void delete(Long id) throws Exception {
+    Optional<QrCode> qrCode = qrCodeDao.findById(id);
+    if(qrCode.isEmpty()) {
+      return;
+    }
+    QrCodeMessage message = QrCodeMessage.builder()
+            .id(id)
+            .xRequestId(MDC.get(ApplicationConstants.X_REQUEST_ID))
+            .action(Action.DELETE)
+            .build();
+    sqsClient.sendMessage(message);
   }
 
   public QrCode get(Long id) throws QrCodeNotFound {
@@ -72,6 +81,15 @@ public class QrCodeEncodeService {
 
   private String generateS3Key(QrCode qrCode) {
     return String.format("%s/%s", qrCode.getId(), qrCode.getName());
+  }
+
+  public void deleteQrCode(QrCode qrCode) {
+    s3Client.deleteObject(generateS3Key(qrCode));
+    qrCodeDao.deleteById(qrCode.getId());
+  }
+
+  private String getUrl(QrCode qrCode) {
+    return String.format("%s/%s", s3Client.getEndpoint(), generateS3Key(qrCode));
   }
 
 }

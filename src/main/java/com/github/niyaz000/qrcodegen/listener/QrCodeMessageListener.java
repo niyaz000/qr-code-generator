@@ -2,6 +2,7 @@ package com.github.niyaz000.qrcodegen.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.niyaz000.qrcodegen.aws.S3Client;
+import com.github.niyaz000.qrcodegen.constant.Action;
 import com.github.niyaz000.qrcodegen.constant.ApplicationConstants;
 import com.github.niyaz000.qrcodegen.dao.QrCodeDao;
 import com.github.niyaz000.qrcodegen.message.QrCodeMessage;
@@ -47,7 +48,11 @@ public class QrCodeMessageListener {
       if (qrCode.isEmpty()) {
         LOGGER.info("Could not find qrCode with id {}", msg.getId());
       } else {
-        service.generate(qrCode.get());
+        if(msg.getAction().equals(Action.CREATE)) {
+          service.generate(qrCode.get());
+        } else {
+          service.deleteQrCode(qrCode.get());
+        }
       }
     } catch (Exception ex) {
       LOGGER.error("error while processing message {}", message);

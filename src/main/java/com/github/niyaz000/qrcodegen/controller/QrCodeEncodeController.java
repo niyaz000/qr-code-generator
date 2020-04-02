@@ -31,14 +31,14 @@ public class QrCodeEncodeController {
     return mapper.mapQrCodeToQrCodeDto(qrCode);
   }
 
-  @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public void delete(@PathVariable("id") Long id) {
+  @DeleteMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public void delete(@PathVariable("id") Long id) throws Exception {
     service.delete(id);
   }
 
-  @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public QrCode get(@PathVariable("id") Long id) throws QrCodeNotFound {
-    return service.get(id);
+  @GetMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public QrCodeDto get(@PathVariable("id") Long id) throws QrCodeNotFound {
+    return mapper.mapQrCodeToQrCodeDto(service.get(id));
   }
 
 }
