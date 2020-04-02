@@ -10,13 +10,14 @@ import com.github.niyaz000.qrcodegen.dao.QrCodeDao;
 import com.github.niyaz000.qrcodegen.exception.QrCodeNotFound;
 import com.github.niyaz000.qrcodegen.message.QrCodeMessage;
 import com.github.niyaz000.qrcodegen.model.QrCode;
+import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Optional;
 
 @Service
@@ -27,9 +28,6 @@ public class QrCodeEncodeService {
 
   @Autowired
   QrCodeDao qrCodeDao;
-
-  @Value("${aws.s3.bucket}")
-  private String s3bucket;
 
   @Autowired
   S3Client s3Client;
@@ -62,8 +60,8 @@ public class QrCodeEncodeService {
     ByteArrayOutputStream stream = QRCode.from(qrCode.getId().toString())
             .withColor(qrCode.getBackGroundColor(), qrCode.getForeGroundColor())
             .withSize(qrCode.getWidth(), qrCode.getHeight())
+            .to(ImageType.valueOf(qrCode.getType().toString()))
             .withCharset(QrDefaults.DEFAULT_ENCODING).stream();
-
     String key = generateS3Key(qrCode);
     s3Client.putObject(key, stream);
   }
@@ -73,7 +71,7 @@ public class QrCodeEncodeService {
   }
 
   private String generateS3Key(QrCode qrCode) {
-    return String.format("%s/%s", s3bucket, qrCode.getId());
+    return String.format("%s/%s", qrCode.getId(), qrCode.getName());
   }
 
 }
