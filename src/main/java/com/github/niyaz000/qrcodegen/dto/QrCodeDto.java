@@ -16,11 +16,13 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class QrCodeDto {
 
+  private Long id;
+
   private String name;
 
-  private Integer width;
+  private Long width;
 
-  private Integer height;
+  private Long height;
 
   private QrImageType type;
 
@@ -30,7 +32,7 @@ public class QrCodeDto {
   @JsonProperty("back_ground_color")
   private Integer backGroundColor;
 
-  private byte[] data;
+  private Object data;
 
   private Status status;
 

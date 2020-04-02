@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class QrCodeMessage {
 
-  private long accountId;
   private long id;
   private String xRequestId;
   private Action action;

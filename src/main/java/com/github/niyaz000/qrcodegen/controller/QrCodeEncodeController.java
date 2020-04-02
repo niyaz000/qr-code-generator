@@ -25,7 +25,7 @@ public class QrCodeEncodeController {
   QrCodeMapper mapper;
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public QrCodeDto post(@Valid QrCodeDto qrCodeDto) throws Exception {
+  public QrCodeDto post(@Valid @RequestBody  QrCodeDto qrCodeDto) throws Exception {
     QrCode qrCode = mapper.mapQrCodeDtoToQrCode(qrCodeDto);
     qrCode = service.create(qrCode);
     return mapper.mapQrCodeToQrCodeDto(qrCode);

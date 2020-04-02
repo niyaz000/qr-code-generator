@@ -15,7 +15,7 @@ public class SqsClient {
   @Autowired
   AmazonSQS amazonSQS;
 
-  @Value("{cloud.aws.sqs.url}")
+  @Value("${aws.sqs.url}")
   private String sqsQueueUrl;
 
   public void sendMessage(Object message) throws Exception {

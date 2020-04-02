@@ -1,8 +1,11 @@
 package com.github.niyaz000.qrcodegen.service;
 
+import com.github.niyaz000.qrcodegen.aws.S3Client;
 import com.github.niyaz000.qrcodegen.aws.SqsClient;
+import com.github.niyaz000.qrcodegen.constant.Action;
 import com.github.niyaz000.qrcodegen.constant.ApplicationConstants;
 import com.github.niyaz000.qrcodegen.constant.QrDefaults;
+import com.github.niyaz000.qrcodegen.constant.Status;
 import com.github.niyaz000.qrcodegen.dao.QrCodeDao;
 import com.github.niyaz000.qrcodegen.exception.QrCodeNotFound;
 import com.github.niyaz000.qrcodegen.message.QrCodeMessage;
@@ -10,8 +13,10 @@ import com.github.niyaz000.qrcodegen.model.QrCode;
 import net.glxn.qrgen.javase.QRCode;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Optional;
 
 @Service
@@ -23,12 +28,19 @@ public class QrCodeEncodeService {
   @Autowired
   QrCodeDao qrCodeDao;
 
+  @Value("${aws.s3.bucket}")
+  private String s3bucket;
+
+  @Autowired
+  S3Client s3Client;
+
   public QrCode create(QrCode qrCode) throws Exception {
+    qrCode.setStatus(Status.CREATED);
     qrCode = qrCodeDao.save(qrCode);
     QrCodeMessage message = QrCodeMessage.builder()
             .id(qrCode.getId())
             .xRequestId(MDC.get(ApplicationConstants.X_REQUEST_ID))
-            .accountId(Long.valueOf(MDC.get(ApplicationConstants.ACCOUNT_KEY)))
+            .action(Action.CREATE)
             .build();
     sqsClient.sendMessage(message);
     return qrCode;
@@ -47,16 +59,21 @@ public class QrCodeEncodeService {
   }
 
   public void generate(QrCode qrCode) {
-    QRCode.from(qrCode.getId().toString())
+    ByteArrayOutputStream stream = QRCode.from(qrCode.getId().toString())
             .withColor(qrCode.getBackGroundColor(), qrCode.getForeGroundColor())
             .withSize(qrCode.getWidth(), qrCode.getHeight())
-            .withCharset(QrDefaults.DEFAULT_ENCODING)
-            .svg();
+            .withCharset(QrDefaults.DEFAULT_ENCODING).stream();
 
+    String key = generateS3Key(qrCode);
+    s3Client.putObject(key, stream);
   }
 
   private void generateSvg(QRCode qrCode) {
     qrCode.svg();
+  }
+
+  private String generateS3Key(QrCode qrCode) {
+    return String.format("%s/%s", s3bucket, qrCode.getId());
   }
 
 }

@@ -36,7 +36,7 @@ public class QrCode {
 
   private Integer backGroundColor;
 
-  private byte[] data;
+  private String data;
 
   @Enumerated(value = EnumType.ORDINAL)
   private Status status = Status.CREATED;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.UUID;
 
 @Order(1)
@@ -16,13 +17,14 @@ public class MDCFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request,
                        ServletResponse response,
-                       FilterChain chain) {
+                       FilterChain chain) throws IOException, ServletException {
     try {
       HttpServletRequest req = (HttpServletRequest) request;
       addXRequestId(req);
       MDC.put(ApplicationConstants.METHOD, req.getMethod());
       MDC.put(ApplicationConstants.PATH, req.getRequestURI());
       MDC.put(ApplicationConstants.QUERY, req.getQueryString());
+      chain.doFilter(request, response);
     } finally {
       MDC.clear();
     }
